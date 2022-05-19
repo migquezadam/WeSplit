@@ -10,14 +10,12 @@ import SwiftUI
 struct ContentView: View {
     
     
-    
+    @State private var useRedText = false
     @State private var checkAmount = 0.0
     @State private var numberOfPeople = 2
     @State private var tipPercentage = 20
     @FocusState private var amountIsFocused: Bool
 
-    
-    
     var totalPerPerson: Double {
         let peopleCount = Double(numberOfPeople + 2)
         let tipSelection = Double(tipPercentage)
@@ -38,7 +36,6 @@ struct ContentView: View {
         return grandTotal
         
     }
-    
     var body: some View {
         NavigationView{
             Form {
@@ -47,17 +44,27 @@ struct ContentView: View {
                         .keyboardType(.decimalPad)
                         .focused($amountIsFocused)
                         
-                    Picker("Number of people", selection: $numberOfPeople) {
+                    Picker("Number of people", selection: $numberOfPeople)
+                     {
                         ForEach(0 ..< 100) {
                             Text("\($0) people")
+                                
                         }
                     }
                 }
-                
                 Section {
                     Picker("Tip percentage", selection: $tipPercentage) {
+                        
                         ForEach(0..<101) {
                             Text($0, format: .percent)
+                        }
+                        
+                    
+                    }.onAppear() {
+                        if tipPercentage == 0 {
+                            useRedText = true
+                        }else if tipPercentage > 0 {
+                            useRedText = false
                         }
                     }
                     
@@ -72,9 +79,8 @@ struct ContentView: View {
                 Section {
                     Text(grandTotal, format: .currency(code: Locale.current.currencyCode ?? "USD"))
                 } header: {
-                    Text("Total Amount")}
+                    Text("Total Amount")}.foregroundColor(useRedText ? .red : .primary)
             }
-            
             .navigationTitle("WeSplit")
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
