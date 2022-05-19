@@ -79,7 +79,7 @@ struct ContentView: View {
                 Section {
                     Text(grandTotal, format: .currency(code: Locale.current.currencyCode ?? "USD"))
                 } header: {
-                    Text("Total Amount")}.foregroundColor(useRedText ? .red : .primary)
+                    Text("Total Amount").foregroundColor(useRedText ? .red : .primary)}
             }
             .navigationTitle("WeSplit")
             .toolbar {
